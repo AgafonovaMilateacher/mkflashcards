@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Мастер-класс</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brand: #fef4e6;
+    --brand-dark: #f5e2c0;
+    --brand-deeper: #e8c990;
+    --accent: #b07d3a;
+    --accent-dark: #8a5f22;
+    --text: #2c1f0e;
+    --text-soft: #6b4f2a;
+    --white: #fffdf9;
+    --shadow: rgba(176,125,58,0.15);
+    --shadow-strong: rgba(176,125,58,0.3);
+    --sidebar-w: 240px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--brand);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    overflow: hidden;
+    -webkit-user-select: text;
+    user-select: text;
+  }
+
+  /* ─── SIDEBAR ─── */
+  .sidebar {
+    width: var(--sidebar-w);
+    min-height: 100vh;
+    background: linear-gradient(180deg, #2c1f0e 0%, #3d2a12 60%, #4e3418 100%);
+    display: flex;
+    flex-direction: column;
+    padding: 36px 20px 28px;
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    z-index: 10;
+    box-shadow: 4px 0 24px var(--shadow-strong);
+  }
+
+  .sidebar-brand {
+    text-align: center;
+    margin-bottom: 44px;
+  }
+
+  .sidebar-brand h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 21px;
+    font-weight: 600;
+    color: var(--brand-deeper);
+    letter-spacing: 0.04em;
+    line-height: 1.3;
+  }
+
+  .sidebar-brand p {
+    font-size: 11px;
+    color: rgba(254,244,230,0.4);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .nav-label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(254,244,230,0.3);
+    margin-bottom: 12px;
+    padding-left: 4px;
+  }
+
+  .nav-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 16px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    color: rgba(254,244,230,0.6);
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    margin-bottom: 6px;
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    text-align: left;
+  }
+
+  .nav-btn .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: rgba(254,244,230,0.08);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  .nav-btn:hover {
+    background: rgba(254,244,230,0.08);
+    border-color: rgba(232,201,144,0.2);
+    color: var(--brand);
+    transform: translateX(3px);
+  }
+
+  .nav-btn:hover .icon {
+    background: rgba(232,201,144,0.15);
+  }
+
+  .nav-btn.active {
+    background: linear-gradient(135deg, rgba(176,125,58,0.3), rgba(232,201,144,0.12));
+    border-color: rgba(232,201,144,0.4);
+    color: var(--brand-deeper);
+    font-weight: 500;
+  }
+
+  .nav-btn.active .icon {
+    background: linear-gradient(135deg, var(--accent), var(--brand-deeper));
+    color: white;
+  }
+
+  .sidebar-footer {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-circle {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    border: 2px solid var(--brand-deeper);
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(254,244,230,0.08);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 28px;
+  }
+
+  .logo-circle:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 22px rgba(176,125,58,0.45);
+    transform: scale(1.05);
+  }
+
+  .logo-circle img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    -webkit-user-drag: none;
+  }
+
+  .sidebar-footer-name {
+    font-size: 12px;
+    color: rgba(254,244,230,0.45);
+    text-align: center;
+    letter-spacing: 0.05em;
+  }
+
+  .community-link {
+    font-size: 11px;
+    color: var(--brand-deeper);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid rgba(232,201,144,0.3);
+    padding-bottom: 1px;
+    transition: all 0.2s;
+  }
+
+  .community-link:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* ─── MAIN ─── */
+  .main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .main::-webkit-scrollbar { width: 5px; }
+  .main::-webkit-scrollbar-track { background: transparent; }
+  .main::-webkit-scrollbar-thumb { background: var(--brand-deeper); border-radius: 10px; }
+
+  .content-area {
+    padding: 48px 52px;
+    display: none;
+    animation: fadeUp 0.45s ease forwards;
+  }
+
+  .content-area.active { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── WELCOME ─── */
+  .welcome-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    gap: 20px;
+    padding: 60px;
+    animation: fadeUp 0.7s ease forwards;
+  }
+
+  .welcome-screen.hidden { display: none; }
+
+  .welcome-tag {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 20px;
+    padding: 5px 18px;
+  }
+
+  .welcome-screen h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.15;
+    max-width: 620px;
+  }
+
+  .welcome-screen p {
+    font-size: 16px;
+    color: var(--text-soft);
+    max-width: 440px;
+    line-height: 1.75;
+  }
+
+  .welcome-hint {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-soft);
+    margin-top: 10px;
+    opacity: 0.65;
+  }
+
+  /* ─── SECTION HEADER ─── */
+  .section-header { margin-bottom: 40px; }
+
+  .section-tag {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  .section-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 38px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .section-header p {
+    font-size: 15px;
+    color: var(--text-soft);
+    margin-top: 8px;
+    max-width: 560px;
+    line-height: 1.75;
+  }
+
+  .divider {
+    width: 48px; height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    margin-top: 14px;
+    border-radius: 2px;
+  }
+
+  /* ─── VIDEO ─── */
+  .video-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .lesson-card {
+    background: var(--white);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px var(--shadow);
+    border: 1px solid rgba(176,125,58,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .lesson-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px var(--shadow-strong);
+  }
+
+  .lesson-label {
+    padding: 22px 28px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .lesson-num {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--brand-deeper));
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  .lesson-info h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .lesson-info p {
+    font-size: 13px;
+    color: var(--text-soft);
+    line-height: 1.65;
+  }
+
+  .video-container {
+    position: relative;
+    margin: 18px 28px 24px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #111;
+  }
+
+  /* watermark overlay — subtle enough not to block viewing, blocks clean recording */
+  .video-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent 0px,
+      transparent 8px,
+      rgba(254,244,230,0.018) 8px,
+      rgba(254,244,230,0.018) 9px
+    );
+  }
+
+  .video-container video {
+    width: 100%;
+    display: block;
+    border-radius: 12px;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* ─── PROMPT ─── */
+  .prompt-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+    align-items: start;
+  }
+
+  .prompt-image-wrap {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px var(--shadow-strong);
+    border: 1px solid rgba(176,125,58,0.15);
+  }
+
+  .prompt-image-wrap img {
+    width: 100%;
+    display: block;
+    pointer-events: none;
+    -webkit-user-drag: none;
+  }
+
+  .prompt-content {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .prompt-box {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 28px;
+    border: 1px solid rgba(176,125,58,0.12);
+    box-shadow: 0 4px 20px var(--shadow);
+  }
+
+  .prompt-box h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--brand-dark);
+  }
+
+  .prompt-box p {
+    font-size: 14px;
+    color: var(--text-soft);
+    line-height: 1.8;
+  }
+
+  .prompt-text-block {
+    background: linear-gradient(135deg, #2c1f0e, #3d2a12);
+    border-radius: 12px;
+    padding: 24px 26px;
+    font-size: 13px;
+    color: var(--brand-deeper);
+    line-height: 1.85;
+    letter-spacing: 0.015em;
+    position: relative;
+  }
+
+  .prompt-text-block::before {
+    content: 'ПРОМПТ';
+    position: absolute;
+    top: 12px; right: 16px;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: rgba(232,201,144,0.35);
+  }
+
+  /* ─── SERVICES ─── */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 20px;
+  }
+
+  .service-card {
+    background: var(--white);
+    border-radius: 18px;
+    padding: 28px;
+    border: 1px solid rgba(176,125,58,0.1);
+    box-shadow: 0 4px 20px var(--shadow);
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .service-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--brand-deeper));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s ease;
+  }
+
+  .service-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 44px var(--shadow-strong);
+    border-color: rgba(176,125,58,0.25);
+  }
+
+  .service-card:hover::after { transform: scaleX(1); }
+
+  .service-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--brand-dark), var(--brand-deeper));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+
+  .service-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .service-card p {
+    font-size: 13px;
+    color: var(--text-soft);
+    line-height: 1.75;
+    flex: 1;
+  }
+
+  .service-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-top: 4px;
+    transition: gap 0.2s;
+  }
+
+  .service-card:hover .service-link-btn { gap: 10px; }
+
+  img, video { -webkit-touch-callout: none; }
+</style>
+</head>
+<body>
+
+<!-- ─── SIDEBAR ─── -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <h1>Мастер-класс<br>по интерактивным Flashrards</h1>
+    <p></p>
+  </div>
+
+  <div class="nav-label">Навигация</div>
+
+  <button class="nav-btn" onclick="showTab('video')" id="btn-video">
+    <span class="icon">🎬</span>
+    Видео уроки
+  </button>
+  <button class="nav-btn" onclick="showTab('prompt')" id="btn-prompt">
+    <span class="icon">✨</span>
+    Промпт
+  </button>
+  <button class="nav-btn" onclick="showTab('services')" id="btn-services">
+    <span class="icon">🔗</span>
+    Сервисы
+  </button>
+
+  <div class="sidebar-footer">
+    <!-- Замените href на вашу ссылку на сообщество -->
+    <a class="logo-circle" href="https://vk.ru/agafonovamila" target="_blank" title="Мой блог">
+      <img src="resources/logo.png" alt="лого"> 
+      
+    </a>
+    <!-- Замените на название вашего блога -->
+    <span class="sidebar-footer-name">Агафонова Людмила|Блог учителя английского</span>
+    <a class="community-link" href="https://vk.ru/agafonovamila" target="_blank">Вступить в сообщество →</a>
+  </div>
+</aside>
+
+<!-- ─── MAIN ─── -->
+<main class="main">
+
+  <!-- WELCOME -->
+  <div class="welcome-screen" id="welcome">
+    <span class="welcome-tag">Добро пожаловать!</span>
+    <h2>Создаём интерактивные Flashrards за 5 минут </h2>
+    <p>Выберите раздел в меню слева, чтобы начать обучение. Видео-уроки, промпт и рекомендованные сервисы ждут вас.</p>
+    <div class="welcome-hint">
+      <span>←</span> Выберите раздел в меню слева
+    </div>
+  </div>
+
+  <!-- ─── ВИДЕО ─── -->
+  <section class="content-area" id="tab-video">
+    <div class="section-header">
+      <span class="section-tag">Обучение</span>
+      <h2>Видео уроки</h2>
+      <p>Три урока, где вы научитесь создавать перелистывающиеся карточки с помощью ИИ — от идеи до готового результата.</p>
+      <div class="divider"></div>
+    </div>
+
+    <div class="video-grid">
+
+      <!-- УРОК 1 -->
+      <div class="lesson-card">
+        <div class="lesson-label">
+          <div class="lesson-num">1</div>
+          <div class="lesson-info">
+            <!-- Замените заголовок и описание на своё -->
+            <h3>Урок 1. Созаем сайт с интерактивными карточками</h3>
+            <p>Пошаговая инструкция по созданию и редактированию сайта</p>
+          </div>
+        </div>
+        <div class="video-container">
+          <video controls controlsList="nodownload nofullscreen noremoteplayback" disablePictureInPicture oncontextmenu="return false;">
+            <source src="resources/video1.mp4" type="video/mp4">
+            Ваш браузер не поддерживает видео.
+          </video>
+        </div>
+      </div>
+
+      <!-- УРОК 2 -->
+      <div class="lesson-card">
+        <div class="lesson-label">
+          <div class="lesson-num">2</div>
+          <div class="lesson-info">
+            <h3>Урок 2. Добавляем свои изображения к карточкам</h3>
+            <p>Научимся добавлять изображения к карточкам, рассмотрим сайт где можно найти качественные изображения.</p>
+          </div>
+        </div>
+        <div class="video-container">
+          <video controls controlsList="nodownload nofullscreen noremoteplayback" disablePictureInPicture oncontextmenu="return false;">
+            <source src="resources/video2.mp4" type="video/mp4">
+            Ваш браузер не поддерживает видео.
+          </video>
+        </div>
+      </div>
+
+      <!-- УРОК 3 -->
+      <div class="lesson-card">
+        <div class="lesson-label">
+          <div class="lesson-num">3</div>
+          <div class="lesson-info">
+            <h3>Урок 3.Как открыть сайт с компьютера</h3>
+            <p>В этом уроке научимся открывать сайт на компьютере чтобы начать им пользоваться, обсудим какие файлы нужно перенести на флешку, чтобы сайт открылся на другом устройстве.</p>
+          </div>
+        </div>
+        <div class="video-container">
+          <video controls controlsList="nodownload nofullscreen noremoteplayback" disablePictureInPicture oncontextmenu="return false;">
+            <source src="resources/video3.mp4" type="video/mp4">
+            Ваш браузер не поддерживает видео.
+          </video>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── ПРОМПТ ─── -->
+  <section class="content-area" id="tab-prompt">
+    <div class="section-header">
+      <span class="section-tag"></span>
+      <h2>Промпт для карточек</h2>
+      <p>Готовый промпт для создания интерактивных карточек с помощью нейросети.</p>
+      <div class="divider"></div>
+    </div>
+
+    <div class="prompt-layout">
+      <div class="prompt-image-wrap">
+        <!-- Замените на вашу картинку -->
+        <img src="resources/picture1.jpg" alt="Пример карточки" oncontextmenu="return false;" draggable="false">
+      </div>
+
+      <div class="prompt-content">
+        <div class="prompt-box">
+          <h3>Промпт</h3>
+          <!-- Замените на своё описание -->
+          <p>При помощи данного промпта у вас получатся яркие, интерактивные карточки, которые вы сможете использовать на своих уроках без интернета.  </p>
+         
+      
+        </div>
+
+        <!-- Замените на ваш настоящий промпт -->
+        <div class="prompt-text-block">
+          Создай  HTML-файл с переворачивающимися карточками (flip cards).
+
+Требования:
+Сделай 10 карточек по теме животные для 4 класса 
+У каждой карточки две стороны:
+лицевая — слово на английском + картинка  я вставлю ее из локальной папки с компьютера в формате images/card1.jpg
+обратная — перевод на русский
+Сделай современный, аккуратный дизайн (скруглённые углы, тени, приятные цвета, эффект наведения hover )
+Карточка должна быть на экране одна и занимать 50 процентов сайта , после того как ученик ее изучил он может перейти к другой нажав кнопку следующая 
+весь сайт с английским интерфейсом 
+добавь также фон это будет изображение с прозрачностью 70 % чтобы не отвлекать внимание от карточек, он также будет с локальной папки images/background.jpg
+
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── СЕРВИСЫ ─── -->
+  <section class="content-area" id="tab-services">
+    <div class="section-header">
+      <span class="section-tag">Рекомендации</span>
+      <h2>Полезные сервисы</h2>
+      <p>Платформы, где вы можете создавать перелистывающиеся карточки с помощью ИИ.</p>
+      <div class="divider"></div>
+    </div>
+
+    <div class="services-grid">
+
+      <!-- Замените href, эмодзи, название и описание на свои -->
+      <a class="service-card" href="https://chat.qwen.ai/" target="_blank">
+        <div class="service-icon">🤖</div>
+        <h3>Qwen</h3>
+        <p><Бесплатная нейросеть для создания HTML сайтов</p>
+        <span class="service-link-btn">Перейти →</span>
+      </a>
+
+      <a class="service-card" href="https://www.magnific.com/ru" target="_blank">
+        <div class="service-icon">✦</div>
+        <h3>Magnific</h3>
+        <p>Сайт с бесплатными , качественными иллюстрациями для Ваших разработок.</p>
+        <span class="service-link-btn">Перейти →</span>
+      </a>
+
+    </div>
+  </section>
+
+</main>
+
+<script>
+  // ─── ЗАЩИТА ОТ ЗАПИСИ ЭКРАНА ───
+  document.addEventListener('contextmenu', e => e.preventDefault());
+
+  document.addEventListener('keydown', e => {
+    // PrintScreen
+    if (e.key === 'PrintScreen') { e.preventDefault(); return false; }
+    // Ctrl/Cmd + Shift + S/4/5 (скриншот)
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && ['s','S','4','5'].includes(e.key)) {
+      e.preventDefault(); return false;
+    }
+    // Ctrl/Cmd + S (сохранить), P (печать), U (источник)
+    if ((e.ctrlKey || e.metaKey) && ['s','S','p','P','u','U'].includes(e.key)) {
+      e.preventDefault(); return false;
+    }
+  });
+
+  // Пауза при скрытии вкладки (запись через другое приложение)
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      document.querySelectorAll('video').forEach(v => v.pause());
+    }
+  });
+
+  // ─── НАВИГАЦИЯ ───
+  function showTab(name) {
+    document.getElementById('welcome').classList.add('hidden');
+    document.querySelectorAll('.content-area').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('video').forEach(v => v.pause());
+
+    document.getElementById('tab-' + name).classList.add('active');
+    document.getElementById('btn-' + name).classList.add('active');
+
+    // Прокрутка вверх при смене вкладки
+    document.querySelector('.main').scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
